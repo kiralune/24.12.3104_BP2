@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">kiralune</string>
+    <string name="teks1">Login</string>
+    <string name="register">Belum punya akun? Daftar disini</string>
+</resources>
