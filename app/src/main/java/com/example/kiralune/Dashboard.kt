@@ -18,7 +18,6 @@ class Dashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard)
 
-        val tv_ucapan: TextView = findViewById(R.id.tv_ucapan)
         val btn_web: Button = findViewById(R.id.btn_web)
 
         val username = intent.getStringExtra("nama" )
@@ -27,6 +26,14 @@ class Dashboard : AppCompatActivity() {
             val url = "https://amikom.ac.id"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
+        }
+
+        if (savedInstanceState == null) {
+            val fragment = DashboardFragment()
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
         }
     }
 }
