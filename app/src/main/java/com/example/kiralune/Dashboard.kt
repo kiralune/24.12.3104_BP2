@@ -9,37 +9,52 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.example.kiralune.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Dashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard)
 
-        val dataList = ArrayList<Mahasiswa>()
-        dataList.add(Mahasiswa("Calista Sasikirana", "23SI12345"))
-        dataList.add(Mahasiswa("Andi Pratama", "23SI12346"))
-        dataList.add(Mahasiswa("Budi Santoso", "23SI12347"))
+        val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        val btn_web: Button = findViewById(R.id.btn_web)
+        // 1. Muat Fragment default (Dashboard) saat pertama kali dibuka
+        loadFragment(DashboardFragment())
 
-        val username = intent.getStringExtra("nama" )
-
-        val rvMahasiswa: RecyclerView = findViewById(R.id.rv_mahasiswa)
-
-        rvMahasiswa.layoutManager = GridLayoutManager(this, 2)
-
-        val adapter = MahasiswaAdapter(dataList)
-
-        rvMahasiswa.adapter = adapter
-
-        btn_web.setOnClickListener {
-            val url = "https://amikom.ac.id"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
+        // 2. Tambahkan listener untuk menangani klik item navigasi
+        bottomNav.setOnItemSelectedListener { item ->
+            var fragment: Fragment
+            when (item.itemId) {
+                R.id.nav_dashboard -> {
+                    fragment = DashboardFragment()
+                    loadFragment(fragment)
+                    true // Mengembalikan true menandakan item telah ditangani
+                }
+                R.id.nav_profile -> {
+                    fragment = ProfileFragment()
+                    loadFragment(fragment)
+                    true
+                }
+                R.id.nav_settings -> {
+                    fragment = SettingFragment()
+                    loadFragment(fragment)
+                    true
+                }
+                else -> false
+            }
         }
     }
+
+    // 3. Buat fungsi helper untuk memuat Fragment
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_home, fragment)
+            .commit()
+    }
+
 }
